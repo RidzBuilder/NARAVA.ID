@@ -1,0 +1,1 @@
+{"name":"@narava/root","private":true,"version":"0.1.0","packageManager":"npm@11.0.0","scripts":{"test":"echo \"Tests pending implementation\"","lint":"echo \"Lint pending implementation\"","typecheck":"echo \"Typecheck pending implementation\"","validate:repository":"node scripts/validate/repository-contract.mjs"}}
