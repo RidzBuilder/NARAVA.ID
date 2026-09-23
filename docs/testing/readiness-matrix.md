@@ -4,23 +4,19 @@
 |---|---|
 | R0 Repository Bootstrap | PASS |
 | R1 Governance & Source-of-Truth | PASS |
-| R2 Domain Foundation | IMPLEMENTED — VERIFICATION PENDING |
-| R3 Application / Capability | PENDING |
-| R4 Contracts | PENDING |
-| R5 Database | PENDING |
-| R6 API | PENDING |
-| R7 Authorization | PENDING |
-| R8 Web | PENDING |
-| R9 Mobile | PENDING |
-| R10 Test Architecture | PENDING |
-| R11 Infrastructure | PENDING |
-| R12 Golden Path Double-COD | PENDING |
-| R13 Reconciliation | PENDING |
-| R14 UAT | PENDING |
+| R2 Domain Foundation | CONSTRUCTED — CI VERIFICATION PENDING |
+| R3 Application / Capability | CONSTRUCTED — CI VERIFICATION PENDING |
+| R4 Contracts | CONSTRUCTED — CI VERIFICATION PENDING |
+| R5 Database | CONSTRUCTED — CI VERIFICATION PENDING |
+| R6 API | BOUNDARY CONSTRUCTED — RUNTIME PENDING |
+| R7 Authorization | CONSTRUCTED — CI VERIFICATION PENDING |
+| R8 Web | BOUNDARY CONSTRUCTED — RUNTIME PENDING |
+| R9 Mobile | BOUNDARY CONSTRUCTED — RUNTIME PENDING |
+| R10 Test Architecture | CONSTRUCTED — CI VERIFICATION PENDING |
+| R11 Infrastructure | CONSTRUCTED — RUNTIME PENDING |
+| R12 Golden Path Double-COD | CONTRACT CONSTRUCTED — E2E RUNTIME PENDING |
+| R13 Reconciliation | CONTRACT CONSTRUCTED — RUNTIME PENDING |
+| R14 UAT | ACCEPTANCE CONTRACT CONSTRUCTED — EXECUTION PENDING |
 | R15 Evidence | PENDING |
-
-R2 implementation has been constructed in `packages/domain` with framework-free domain primitives, states, invariants, lifecycle transitions, money/pricing snapshots, settlement/payment separation, fulfillment handoffs, margin realization, domain events and invariant tests.
-
-A stage may advance only after executable verification is available and the stage gate is formally evidenced.
-
-The repository is not implementation-ready until all required executable stages are validated.
+ 
+A stage can be promoted to PASS only after executable evidence exists. No PASS is asserted for a stage whose required runtime verification has not been observed.
