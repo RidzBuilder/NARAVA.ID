@@ -1,0 +1,25 @@
+-- NARAVA Batch 1 canonical relational schema
+create table if not exists organizations (id text primary key, name text not null);
+create table if not exists users (id text primary key, name text not null, email text unique not null);
+create table if not exists memberships (user_id text not null references users(id), organization_id text not null references organizations(id), role text not null, primary key(user_id,organization_id));
+create table if not exists brands (id text primary key, organization_id text not null references organizations(id), name text not null);
+create table if not exists suppliers (id text primary key, organization_id text not null references organizations(id), brand_id text references brands(id));
+create table if not exists products (id text primary key, supplier_id text not null references suppliers(id), sku text not null unique, name text not null, active boolean not null default false);
+create table if not exists product_prices (id text primary key, product_id text not null references products(id), cost_price bigint not null, reseller_price bigint not null, suggested_selling_price bigint not null, effective_at timestamptz not null);
+create table if not exists inventory_locations (id text primary key, supplier_id text not null references suppliers(id), name text not null);
+create table if not exists inventory_balances (product_id text not null references products(id), location_id text not null references inventory_locations(id), quantity integer not null check(quantity >= 0), primary key(product_id,location_id));
+create table if not exists inventory_events (id text primary key, product_id text not null references products(id), location_id text not null references inventory_locations(id), quantity_delta integer not null, reason text not null, occurred_at timestamptz not null);
+create table if not exists customers (id text primary key, name text not null, phone text not null, shipping_address text not null);
+create table if not exists orders (id text primary key, reseller_id text not null references users(id), customer_id text not null references customers(id), state text not null, created_at timestamptz not null);
+create table if not exists order_items (id text primary key, order_id text not null references orders(id), product_id text not null references products(id), quantity integer not null check(quantity > 0));
+create table if not exists order_price_snapshots (id text primary key, order_item_id text not null references order_items(id), product_id text not null, sku text not null, supplier_id text not null, cost_price bigint not null, reseller_price bigint not null, suggested_selling_price bigint not null);
+create table if not exists payments (id text primary key, order_id text not null references orders(id), payer_customer_id text not null references customers(id), amount bigint not null, state text not null, occurred_at timestamptz not null);
+create table if not exists settlements (id text primary key, order_id text not null references orders(id), supplier_id text not null references suppliers(id), amount bigint not null, state text not null, occurred_at timestamptz not null);
+create table if not exists fulfillments (id text primary key, order_id text not null references orders(id), state text not null);
+create table if not exists handoffs (id text primary key, order_id text not null references orders(id), type text not null, actor_id text not null references users(id), occurred_at timestamptz not null);
+create table if not exists margin_ledgers (id text primary key, order_id text not null references orders(id), state text not null, amount bigint not null);
+create table if not exists ledger_entries (id text primary key, order_id text not null references orders(id), type text not null, amount bigint not null, occurred_at timestamptz not null);
+create table if not exists domain_events (id text primary key, type text not null, aggregate_type text not null, aggregate_id text not null, aggregate_version integer not null, actor_id text not null, occurred_at timestamptz not null, correlation_id text not null, causation_id text, payload jsonb not null);
+create table if not exists audit_records (id text primary key, actor_id text not null, action text not null, aggregate_type text not null, aggregate_id text not null, occurred_at timestamptz not null, evidence jsonb not null);
+create index if not exists idx_orders_reseller on orders(reseller_id);
+create index if not exists idx_domain_events_aggregate on domain_events(aggregate_type,aggregate_id,aggregate_version);
