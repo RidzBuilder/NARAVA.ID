@@ -1,1 +1,13 @@
-{"name":"@narava/root","private":true,"version":"0.1.0","packageManager":"npm@11.0.0","scripts":{"test":"echo \"Tests pending implementation\"","lint":"echo \"Lint pending implementation\"","typecheck":"echo \"Typecheck pending implementation\"","validate:repository":"node scripts/validate/repository-contract.mjs"}}
+{
+  "name":"@narava/root",
+  "private":true,
+  "version":"0.1.0",
+  "packageManager":"npm@11.0.0",
+  "workspaces":["packages/domain"],
+  "scripts":{
+    "test":"npm --workspace @narava/domain test",
+    "typecheck":"npm --workspace @narava/domain typecheck",
+    "lint":"echo \"Lint pending implementation\"",
+    "validate:repository":"node scripts/validate/repository-contract.mjs"
+  }
+}
