@@ -1,0 +1,2 @@
+-- Fixture describes the canonical economic chain using explicit IDs.
+-- Product -> order -> settlement -> supplier handoff -> inventory movement -> customer handoff -> payment -> margin -> reconciliation.
