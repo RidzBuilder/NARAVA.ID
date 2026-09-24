@@ -12,7 +12,8 @@ export type OrderState =
   | "CUSTOMER_HANDED_OFF"
   | "CUSTOMER_PAID"
   | "MARGIN_REALIZED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "EXCEPTION_REQUIRED";
 
 export interface OrderLine {
   readonly lineId: Id;
@@ -62,13 +63,14 @@ export function transitionOrder(order: Order, next: OrderState): Order {
     DRAFT: ["SUBMITTED", "CANCELLED"],
     SUBMITTED: ["VALIDATED", "CANCELLED"],
     VALIDATED: ["SUPPLIER_SETTLED", "CANCELLED"],
-    SUPPLIER_SETTLED: ["SUPPLIER_HANDED_OFF", "CANCELLED"],
-    SUPPLIER_HANDED_OFF: ["CUSTOMER_DELIVERY"],
-    CUSTOMER_DELIVERY: ["CUSTOMER_HANDED_OFF"],
-    CUSTOMER_HANDED_OFF: ["CUSTOMER_PAID"],
-    CUSTOMER_PAID: ["MARGIN_REALIZED"],
+    SUPPLIER_SETTLED: ["SUPPLIER_HANDED_OFF", "EXCEPTION_REQUIRED"],
+    SUPPLIER_HANDED_OFF: ["CUSTOMER_DELIVERY", "EXCEPTION_REQUIRED"],
+    CUSTOMER_DELIVERY: ["CUSTOMER_HANDED_OFF", "EXCEPTION_REQUIRED"],
+    CUSTOMER_HANDED_OFF: ["CUSTOMER_PAID", "EXCEPTION_REQUIRED"],
+    CUSTOMER_PAID: ["MARGIN_REALIZED", "EXCEPTION_REQUIRED"],
     MARGIN_REALIZED: [],
     CANCELLED: [],
+    EXCEPTION_REQUIRED: [],
   };
   if (!allowed[order.state].includes(next)) {
     throw new InvalidStateTransitionError(`Cannot transition order from ${order.state} to ${next}`);
