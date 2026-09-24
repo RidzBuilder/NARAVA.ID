@@ -19,11 +19,14 @@ export function realizeMargin(input: {
 }): MarginRecord {
   const adjustment = input.approvedAdjustment ?? Money.zero();
   const gross = input.customerPayment.amount - input.supplierSettlement.amount;
-  if (gross < 0n) throw new InvariantViolationError("Realized margin cannot be negative in Batch 1 without an explicit adjustment model");
+  const realized = gross + adjustment.amount;
+  if (realized < 0n) {
+    throw new InvariantViolationError("Realized margin cannot be negative after applying the approved adjustment");
+  }
   return {
     marginId: id(input.marginId),
     orderId: id(input.orderId),
     state: "REALIZED",
-    amount: new Money(gross + adjustment.amount),
+    amount: new Money(realized),
   };
 }
