@@ -82,3 +82,22 @@ test("order lifecycle forbids skipping supplier settlement/handoff", () => {
   const realized = transitionOrder(paid,"MARGIN_REALIZED");
   assert.equal(realized.state,"MARGIN_REALIZED");
 });
+
+
+test("post-settlement cancellation requires exception semantics", () => {
+  const order = createOrder({
+    orderId:"o3",
+    resellerId:"r1",
+    customerId:"c1",
+    lines:[{lineId:id("l3"),productId:id("product-1"),quantity:1,priceSnapshot:snapshot}]
+  });
+  const settled = transitionOrder(
+    transitionOrder(
+      transitionOrder(order,"SUBMITTED"),
+      "VALIDATED"
+    ),
+    "SUPPLIER_SETTLED"
+  );
+  assert.throws(() => transitionOrder(settled,"CANCELLED"));
+  assert.equal(transitionOrder(settled,"EXCEPTION_REQUIRED").state,"EXCEPTION_REQUIRED");
+});
