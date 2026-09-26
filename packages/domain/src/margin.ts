@@ -28,7 +28,7 @@ export function realizeMargin(input: {
   }
 
   const gross = input.customerPayment.amount - input.supplierSettlement.amount;
-  const realized = gross + adjustment.amount;
+  const realized = gross + adjustment;
   if (realized < 0n) {
     throw new InvariantViolationError("Realized margin cannot be negative after applying the approved adjustment");
   }
