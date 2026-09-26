@@ -10,8 +10,8 @@
     "packages/authorization"
   ],
   "scripts": {
-    "test": "npm --workspace @narava/domain test",
-    "typecheck": "npm --workspace @narava/domain typecheck",
+    "test": "npm run test --workspace @narava/domain",
+    "typecheck": "npm run typecheck --workspace @narava/domain",
     "lint": "echo \"Lint pending implementation\"",
     "validate:repository": "node scripts/validate/repository-contract.mjs"
   }
