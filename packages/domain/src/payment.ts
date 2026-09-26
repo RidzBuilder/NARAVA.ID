@@ -1,5 +1,5 @@
-import { Id, Money, id, timestamp, Timestamp } from "./shared";
-import { InvariantViolationError } from "./errors";
+import { Id, Money, id, timestamp, Timestamp } from "./shared.js";
+import { InvariantViolationError } from "./errors.js";
 
 export type CustomerPaymentState = "PENDING" | "RECORDED" | "REVERSED";
 
