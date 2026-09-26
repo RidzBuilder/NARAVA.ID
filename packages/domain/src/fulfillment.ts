@@ -1,5 +1,5 @@
-import { Id, id, timestamp, Timestamp } from "./shared";
-import { InvariantViolationError } from "./errors";
+import { Id, id, timestamp, Timestamp } from "./shared.js";
+import { InvariantViolationError } from "./errors.js";
 
 export type FulfillmentState =
   | "NOT_STARTED"

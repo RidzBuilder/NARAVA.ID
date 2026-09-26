@@ -1,6 +1,6 @@
-import { Id, Money, id } from "./shared";
-import { InvalidStateTransitionError, InvariantViolationError } from "./errors";
-import type { PriceSnapshot } from "./pricing";
+import { Id, Money, id } from "./shared.js";
+import { InvalidStateTransitionError, InvariantViolationError } from "./errors.js";
+import type { PriceSnapshot } from "./pricing.js";
 
 export type OrderState =
   | "DRAFT"
@@ -44,8 +44,10 @@ export function createOrder(input: {
     }
   }
   const estimated = input.lines.reduce(
-    (sum, line) => sum + (line.priceSnapshot.suggestedSellingPrice.amount -
-      line.priceSnapshot.resellerPrice.amount) * BigInt(line.quantity),
+    (sum, line) =>
+      sum +
+      (line.priceSnapshot.suggestedSellingPrice.amount - line.priceSnapshot.resellerPrice.amount) *
+        BigInt(line.quantity),
     0n,
   );
   return {
