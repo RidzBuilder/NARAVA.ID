@@ -1,10 +1,32 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Money, applyInventoryMovement, createInventoryMovement, createOrder, createPriceSnapshot, id, transitionOrder, recordHandoff, realizeMargin, isCompletedTransaction } from "../src/index.js";
+import {
+  Money,
+  applyInventoryMovement,
+  createInventoryMovement,
+  createOrder,
+  createPriceSnapshot,
+  id,
+  transitionOrder,
+  recordHandoff,
+  realizeMargin,
+  isCompletedTransaction,
+} from "../src/index.js";
 
 const snapshot = createPriceSnapshot({
   productId:"product-1", sku:"SKU-1", supplierId:"supplier-1",
   costPrice:new Money(50_000), resellerPrice:new Money(80_000), suggestedSellingPrice:new Money(100_000)
+});
+
+test("Money rejects unsafe numeric input", () => {
+  assert.throws(() => new Money(Number.MAX_SAFE_INTEGER + 1), /safe integer/);
+});
+
+test("Money arithmetic preserves non-negative IDR amounts", () => {
+  const total = new Money(100).add(new Money(50));
+  assert.equal(total.amount, 150n);
+  assert.equal(new Money(150).subtract(new Money(50)).amount, 100n);
+  assert.throws(() => new Money(40).subtract(new Money(50)), /would become negative/);
 });
 
 test("N01 inventory cannot become negative", () => {
@@ -42,6 +64,37 @@ test("N05 estimated margin is distinct from realized margin", () => {
   const realized = realizeMargin({marginId:"m1",orderId:"o1",customerPayment:new Money(100_000),supplierSettlement:new Money(80_000)});
   assert.equal(order.estimatedMargin.amount, 20_000n);
   assert.equal(realized.amount.amount, 20_000n);
+});
+
+test("approved positive adjustment is applied and requires a reason", () => {
+  const realized = realizeMargin({
+    marginId:"m2",
+    orderId:"o2",
+    customerPayment:new Money(100_000),
+    supplierSettlement:new Money(80_000),
+    approvedAdjustment:{amount:5_000n,reason:"approved delivery adjustment"},
+  });
+  assert.equal(realized.amount.amount, 25_000n);
+  assert.equal(realized.state, "ADJUSTED");
+  assert.throws(() => realizeMargin({
+    marginId:"m3",
+    orderId:"o3",
+    customerPayment:new Money(100_000),
+    supplierSettlement:new Money(80_000),
+    approvedAdjustment:{amount:1_000n,reason:""},
+  }), /reason is required/);
+});
+
+test("approved negative adjustment is supported without erasing history", () => {
+  const adjusted = realizeMargin({
+    marginId:"m4",
+    orderId:"o4",
+    customerPayment:new Money(100_000),
+    supplierSettlement:new Money(80_000),
+    approvedAdjustment:{amount:-5_000n,reason:"approved customer refund adjustment"},
+  });
+  assert.equal(adjusted.amount.amount, 15_000n);
+  assert.equal(adjusted.state, "ADJUSTED");
 });
 
 test("N08 critical transitions require attributable handoff actor", () => {
@@ -82,7 +135,6 @@ test("order lifecycle forbids skipping supplier settlement/handoff", () => {
   const realized = transitionOrder(paid,"MARGIN_REALIZED");
   assert.equal(realized.state,"MARGIN_REALIZED");
 });
-
 
 test("post-settlement cancellation requires exception semantics", () => {
   const order = createOrder({
