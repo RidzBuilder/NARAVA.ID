@@ -1,5 +1,5 @@
-import { Id, Money, id } from "./shared";
-import { InvariantViolationError } from "./errors";
+import { Id, Money, id } from "./shared.js";
+import { InvariantViolationError } from "./errors.js";
 
 export type MarginState = "ESTIMATED" | "REALIZED" | "ADJUSTED" | "REVERSED";
 
