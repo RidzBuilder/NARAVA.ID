@@ -1,6 +1,6 @@
-import { Id, Money, id } from "./shared.js";
-import { InvalidStateTransitionError, InvariantViolationError } from "./errors.js";
-import type { PriceSnapshot } from "./pricing.js";
+import { Id, Money, id } from "./shared.ts";
+import { InvalidStateTransitionError, InvariantViolationError } from "./errors.ts";
+import type { PriceSnapshot } from "./pricing.ts";
 
 export type OrderState =
   | "DRAFT"
