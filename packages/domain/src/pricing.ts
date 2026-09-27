@@ -1,5 +1,5 @@
-import { Id, Money, id } from "./shared.js";
-import { InvariantViolationError } from "./errors.js";
+import { Id, Money, id } from "./shared.ts";
+import { InvariantViolationError } from "./errors.ts";
 
 export interface PriceSnapshot {
   readonly productId: Id;
