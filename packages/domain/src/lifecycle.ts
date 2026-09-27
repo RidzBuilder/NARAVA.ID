@@ -1,4 +1,4 @@
-import type { Order } from "./order.js";
+import type { Order } from "./order.ts";
 
 export interface CompletedTransactionCriteria {
   supplierSettlementRecorded: boolean;
