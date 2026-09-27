@@ -1,5 +1,5 @@
-import { Id, Money, id } from "./shared";
-import { InvariantViolationError } from "./errors";
+import { Id, id } from "./shared.ts";
+import { InvariantViolationError } from "./errors.ts";
 
 export interface InventoryBalance {
   readonly productId: Id;

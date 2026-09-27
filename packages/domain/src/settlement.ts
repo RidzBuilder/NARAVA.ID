@@ -1,5 +1,5 @@
-import { Id, Money, id, timestamp, Timestamp } from "./shared";
-import { InvariantViolationError } from "./errors";
+import { Id, Money, id, timestamp, Timestamp } from "./shared.ts";
+import { InvariantViolationError } from "./errors.ts";
 
 export type SettlementState = "PENDING" | "RECORDED" | "REVERSED";
 

@@ -11,7 +11,7 @@ import {
   recordHandoff,
   realizeMargin,
   isCompletedTransaction,
-} from "../src/index.js";
+} from "../src/index.ts";
 
 const snapshot = createPriceSnapshot({
   productId:"product-1", sku:"SKU-1", supplierId:"supplier-1",
@@ -38,8 +38,8 @@ test("N01 inventory cannot become negative", () => {
 });
 
 test("N03 supplier settlement and customer payment remain separate records", async () => {
-  const settlement = await import("../src/settlement.js");
-  const payment = await import("../src/payment.js");
+  const settlement = await import("../src/settlement.ts");
+  const payment = await import("../src/payment.ts");
   const s = settlement.recordSupplierSettlement({
     settlementId:"set-1", orderId:"order-1", supplierId:"supplier-1", amount:new Money(80_000),
     recordedAt:"2026-09-23T00:00:00Z"
