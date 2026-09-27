@@ -1,4 +1,4 @@
-import { Id, Timestamp, id, timestamp } from "./shared.js";
+import { Id, Timestamp, id, timestamp } from "./shared.ts";
 
 export type DomainEventType =
   | "UserRegistered"
