@@ -1,5 +1,5 @@
-import { Id, id } from "./shared.js";
-import { InvariantViolationError } from "./errors.js";
+import { Id, id } from "./shared.ts";
+import { InvariantViolationError } from "./errors.ts";
 
 export interface InventoryBalance {
   readonly productId: Id;
